@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmos Experience - Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+
+        body {
+            background-image: url('Untitled design (1).png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #fff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000 !important;
+        }
+
+        .contact-btn:hover {
+            background-color: #fff !important;
+        }
+
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-text {
+            font-size: 64px;
+            font-weight: 300;
+        }
+
+        .skills-section, .projects-section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .skills-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .skills-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .skill-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .skill-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .skill-level {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: #fff;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .projects-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .project-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .project-tab.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+        }
+
+        .project-content {
+            display: none;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .project-content.active {
+            display: block;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .project-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .project-description {
+            line-height: 1.6;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: #000;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #000;
+        }
+        .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease;
+}
+
+.section-header.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header h2 {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, #fff, #87CEEB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.section-header .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), #fff, rgba(255,255,255,0));
+    margin: 0 auto;
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Personal Resume</div>
+        <div class="nav-links">
+            <a href="#" class="contact-btn" id="contactBtn">Contact Me</a>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 class="hero-text">Hey, my name is Lance.</h1>
+    </section>
+
+    <section class="skills-section">
+        <div class="section-header">
+            <h2>My Skills</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="skills-container">
+            <div class="skill-card">
+                <i class="fab fa-java skill-icon"></i>
+                <h3 class="skill-name">Java</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 90%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fab fa-python skill-icon"></i>
+                <h3 class="skill-name">Python</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fab fa-html5 skill-icon"></i>
+                <h3 class="skill-name">HTML</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 95%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fab fa-css3-alt skill-icon"></i>
+                <h3 class="skill-name">CSS</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 88%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fab fa-js skill-icon"></i>
+                <h3 class="skill-name">JavaScript</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 92%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-database skill-icon"></i>
+                <h3 class="skill-name">SQL</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 87%"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-code skill-icon"></i>
+                <h3 class="skill-name">C</h3>
+                <div class="skill-level">
+                    <div class="skill-progress" style="width: 82%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects-section">
+        <div class="section-header">
+            <h2>My Projects</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="projects-container">
+            <div class="project-tabs">
+                <button class="project-tab active" data-project="project1">Project 1</button>
+                <button class="project-tab" data-project="project2">Project 2</button>
+                <button class="project-tab" data-project="project3">Project 3</button>
+            </div>
+            
+            <div class="project-content active" id="project1">
+                <img src="Screenshot (35).png" alt="Project 1" class="project-image">
+                <h3 class="project-title">Fitness website</h3>
+                <p class="project-description">This was a website made my me for our project for a Hacathon</p>
+            </div>
+            
+            <div class="project-content" id="project2">
+                <img src="/api/placeholder/1200/400" alt="Project 2" class="project-image">
+                <h3 class="project-title">Project 2</h3>
+                <p class="project-description">A detailed description of your second project goes here. Explain the technologies used, challenges faced, and solutions implemented.</p>
+            </div>
+            
+            <div class="project-content" id="project3">
+                <img src="/api/placeholder/1200/400" alt="Project 3" class="project-image">
+                <h3 class="project-title">Project 3</h3>
+                <p class="project-description">A detailed description of your third project goes here. Explain the technologies used, challenges faced, and solutions implemented.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-indicator">
+        Scroll to explore
+        <div class="scroll-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </div>
+
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2>Contact Me</h2>
+            <p style="margin-top: 20px;">lancedabre@icloud.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Observe containers
+        observer.observe(document.querySelector('.skills-container'));
+        observer.observe(document.querySelector('.projects-container'));
+
+        // Hide scroll indicator when reaching sections
+        const sections = document.querySelectorAll('.skills-section, .projects-section');
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+
+        const hideScrollIndicator = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    scrollIndicator.style.opacity = '0';
+                } else {
+                    scrollIndicator.style.opacity = '0.8';
+                }
+            });
+        });
+
+        sections.forEach(section => hideScrollIndicator.observe(section));
+
+        // Project tabs functionality
+        const projectTabs = document.querySelectorAll('.project-tab');
+        const projectContents = document.querySelectorAll('.project-content');
+
+        projectTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                projectTabs.forEach(t => t.classList.remove('active'));
+                projectContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.project).classList.add('active');
+            });
+        });
+
+        // Contact modal functionality
+        const contactBtn = document.getElementById('contactBtn');
+        const contactModal = document.getElementById('contactModal');
+        const closeModal = document.getElementById('closeModal');
+
+        contactBtn.addEventListener('click', () => {
+            contactModal.classList.add('active');
+        });
+
+        closeModal.addEventListener('click', () => {
+            contactModal.classList.remove('active');
+        });
+
+        contactModal.addEventListener('click', (e) => {
+            if (e.target === contactModal) {
+                contactModal.classList.remove('active');
+            }
+        });
+        // Add this to your existing script section
+const headerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+// Observe all section headers
+document.querySelectorAll('.section-header').forEach(header => {
+    headerObserver.observe(header);
+});
+    </script>
+</body>
+</html>
